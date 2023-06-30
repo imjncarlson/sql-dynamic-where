@@ -6,6 +6,29 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imjncarlson/sql-dynamic-where"
+  },
+  "keywords": [
+    "SQL",
+    "WHERE",
+    "dynamic",
+    "query",
+    "clause",
+    "syntax",
+    "logic",
+    "convert",
+    "operators",
+    "builder",
+    "concatenation",
+    "utility",
+    "string"
+  ],
+  "author": "Jacob Carlson <imjncarlson@gmail.com> (https://github.com/imjncarlson)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/imjncarlson/sql-dynamic-where/issues"
+  },
+  "homepage": "https://github.com/imjncarlson/sql-dynamic-where#readme"
 }
