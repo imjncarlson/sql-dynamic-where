@@ -90,6 +90,7 @@ class SQLDynamicWhere{
 
         // TODO Add override for insert symbol?
         // TODO Add option to insert values over symbol?
+        // TODO throw an error here if base query is undefined
 
         var clauses = "";
 
@@ -113,7 +114,7 @@ class SQLDynamicWhere{
         else {
 
             // Split base query into parts using WHERE keyword as the delimiter
-            splitBaseQuery = baseQuery.toLowerCase().split('where')
+            var splitBaseQuery = baseQuery.toLowerCase().split('where')
 
             // If there are multiple WHERE keywords in the base query throw an error
             if (splitBaseQuery.length !== 2) throw new Error("Error crafting where clauses! Base query contains too many \'where\' keywords");
