@@ -1,6 +1,6 @@
 {
   "name": "sql-dynamic-where",
-  "version": "0.1",
+  "version": "1.0.0",
   "description": "Dynamically handles multiple WHERE SQL statements",
   "main": "SQLDynamicWhere.js",
   "scripts": {
