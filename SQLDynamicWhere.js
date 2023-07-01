@@ -33,6 +33,8 @@ class SQLDynamicWhere{
         this.whereClauses = [];
     }
 
+    getClausesArray(){ return this.whereClauses; }
+
     /**
      *
      * Adds a new dynamic where clause 

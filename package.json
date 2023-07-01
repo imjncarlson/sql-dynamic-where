@@ -4,7 +4,7 @@
   "description": "Dynamically handle multiple WHERE SQL statements",
   "main": "SQLDynamicWhere.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/imjncarlson/sql-dynamic-where/issues"
   },
-  "homepage": "https://github.com/imjncarlson/sql-dynamic-where#readme"
+  "homepage": "https://github.com/imjncarlson/sql-dynamic-where#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
 }
