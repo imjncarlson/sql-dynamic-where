@@ -83,8 +83,24 @@ dynamicWhere.getClauses(true)
 
 ## Function Overrides
 
+Add additional values to the skip in the clause
+```js
+add(field, comparisonOperator, value, override = [])
+add(logicalOperator, field, comparisonOperator, value, override = [])
+```
+Include leading logic operator and remove WHERE keyword
+```js
+getClauses(leadingLogicalOperator = false)
+```
+Include leading logic operator and remove WHERE keyword  
+Define a different placeholder string
+```js
+getClausesWithValuePlaceholders(leadingLogicalOperator = false, placeholderString = '(?)')
+```
 
-
+## Support
+Report bugs on the [issues page](https://github.com/imjncarlson/sql-dynamic-where/issues)  
+Reach out to imjncarlson@gmail.com if you have questions!
 
 ## License
 
