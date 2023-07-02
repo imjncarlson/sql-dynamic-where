@@ -26,14 +26,25 @@ class SQLDynamicWhere{
 
     /**
      * 
-     * Initializes where clause storage
+     * Initializes where clause storage and values storage
      * 
      */
     constructor(){
         this.whereClauses = [];
+        this.values = [];
     }
 
-    getClausesArray(){ return this.whereClauses; }
+    /**
+     *
+     * Adds a new dynamic where clause 
+     *
+     * @param {string} field - The table field
+     * @param {Comparison} comparisonOperator - The comparison operator of the where clause
+     * @param {*} value - The value to compare against
+     * @param {Array} override - (Optional) An array of additional value overrides to ignore
+     * 
+     */
+    add(field, comparisonOperator, value, override = []){ this.add(Logic.And, field, comparisonOperator, value, override) }
 
     /**
      *
@@ -51,18 +62,27 @@ class SQLDynamicWhere{
         // If there is no value or it is overrided then do not add it to the array
         if (value === null || typeof value === 'undefined' || override.includes(value)) return;
 
-        // Otherwise store it in the override array
+        // Store where clause
         this.whereClauses.push(
             {
                 logicalOperator: logicalOperator,
                 field: field,
                 comparisonOperator: comparisonOperator,
-                value: value,
                 override: override
             }
         );
+        
+        // Store values
+        this.values.push(value);
 
     }
+
+    /**
+     * 
+     * Returns the array that stores all the where clause data. Mostly used for testing
+     * 
+     */
+    getClausesArray(){ return this.whereClauses; }
 
     /**
      * 
@@ -70,17 +90,7 @@ class SQLDynamicWhere{
      * Values will be in the order they were added in.
      * 
      */
-    getValues(){
-
-        var onlyValues = [];
-
-        this.whereClauses.forEach(element => {
-            onlyValues.push(element.value);
-        });
-
-        return onlyValues;
-
-    }
+    getValues(){ return this.values }
 
     /**
      * 
@@ -151,6 +161,14 @@ class SQLDynamicWhere{
 
         return clauses;
 
+    }
+
+    /**
+     * Clears all stored where clause storage
+     */
+    clear(){
+        this.whereClauses = [];
+        this.values = [];
     }
 
 }
