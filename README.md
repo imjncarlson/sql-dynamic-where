@@ -100,7 +100,7 @@ getClausesWithValuePlaceholders(leadingLogicalOperator = false, placeholderStrin
 
 ## Support
 Report bugs on the [issues page](https://github.com/imjncarlson/sql-dynamic-where/issues)  
-Reach out to imjncarlson@gmail.com if you have questions!
+Reach out to <imjncarlson@gmail.com> if you have questions!
 
 ## License
 
