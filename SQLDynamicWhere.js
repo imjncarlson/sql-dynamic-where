@@ -109,8 +109,12 @@ class SQLDynamicWhere{
         for (let i = 0; i < this.whereClauses.length; i++){
 
             // Skip logical operator on the first clause
-            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${this.values[i]}`;
-            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${this.values[i]}`;
+            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator}`;
+            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator}`;
+
+            // If the value is a string put it in quotations
+            if (typeof this.values[i] === 'string') clauses += ` \'${this.values[i]}\'`;
+            else clauses += ` ${this.values[i]}`
             
         }
 
