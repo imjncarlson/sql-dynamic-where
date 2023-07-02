@@ -98,65 +98,24 @@ class SQLDynamicWhere{
      * @returns A SQL query safe string that contains all the where clauses
      * 
      */
-    getClauses(baseQuery){
+    getClauses(leadingLogicalOperator = false){
 
         // TODO Add override for insert symbol?
         // TODO Add option to insert values over symbol?
         // TODO throw an error here if base query is undefined
-
+        
         var clauses = "";
 
-        // If no "WHERE" keyword present in the base query
-        if (!baseQuery.toLowerCase().includes("where")){
+        // Add WHERE keyword
+        if (!leadingLogicalOperator) clauses += ' WHERE';
+
+        // Add clauses
+        for (let i = 0; i < this.whereClauses.length; i++){
+
+            // Skip logical operator on the first clause
+            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
+            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
             
-            // Add WHERE keyword
-            baseQuery += ' WHERE ';
-
-            // Add clauses
-            for (let i = 0; i < this.whereClauses.length; i++){
-
-                // Skip logical operator on the first clause
-                if (i === 0 ) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                
-            }
-
-        }
-        // If "WHERE" keyword already present in the base query
-        else {
-
-            // Split base query into parts using WHERE keyword as the delimiter
-            var splitBaseQuery = baseQuery.toLowerCase().split('where')
-
-            // If there are multiple WHERE keywords in the base query throw an error
-            if (splitBaseQuery.length !== 2) throw new Error("Error crafting where clauses! Base query contains too many \'where\' keywords");
-
-            // If there are no clauses present
-            if (splitBaseQuery[1].trim().length === 0){
-                
-                // Add clauses
-                for (let i = 0; i < this.whereClauses.length; i++){
-
-                    // Skip logical operator on the first clause
-                    if (i === 0 ) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                    else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                    
-                }
-
-            }
-            // If there are some clauses already present
-            else {
-
-                // Add clauses
-                for (let i = 0; i < this.whereClauses.length; i++){
-
-                    // Skip logical operator on the first clause
-                    clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                    
-                }
-                
-            }
-
         }
 
         return clauses;
