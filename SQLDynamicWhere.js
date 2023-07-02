@@ -26,12 +26,25 @@ class SQLDynamicWhere{
 
     /**
      * 
-     * Initializes where clause storage
+     * Initializes where clause storage and values storage
      * 
      */
     constructor(){
         this.whereClauses = [];
+        this.values = [];
     }
+
+    /**
+     *
+     * Adds a new dynamic where clause 
+     *
+     * @param {string} field - The table field
+     * @param {Comparison} comparisonOperator - The comparison operator of the where clause
+     * @param {*} value - The value to compare against
+     * @param {Array} override - (Optional) An array of additional value overrides to ignore
+     * 
+     */
+    add(field, comparisonOperator, value, override = []){ this.add(Logic.And, field, comparisonOperator, value, override) }
 
     /**
      *
@@ -49,18 +62,27 @@ class SQLDynamicWhere{
         // If there is no value or it is overrided then do not add it to the array
         if (value === null || typeof value === 'undefined' || override.includes(value)) return;
 
-        // Otherwise store it in the override array
+        // Store where clause
         this.whereClauses.push(
             {
                 logicalOperator: logicalOperator,
                 field: field,
                 comparisonOperator: comparisonOperator,
-                value: value,
                 override: override
             }
         );
+        
+        // Store values
+        this.values.push(value);
 
     }
+
+    /**
+     * 
+     * Returns the array that stores all the where clause data. Mostly used for testing
+     * 
+     */
+    getClausesArray(){ return this.whereClauses; }
 
     /**
      * 
@@ -68,87 +90,75 @@ class SQLDynamicWhere{
      * Values will be in the order they were added in.
      * 
      */
-    getValues(){
+    getValues(){ return this.values }
 
-        var onlyValues = [];
+    /**
+     * 
+     * @param {boolean} leadingLogicalOperator - (Optional) Choose whether the string contains the WHERE clause and if the first clause needs a logical operator
+     * @returns A SQL query safe string that contains all the where clauses
+     * 
+     */
+    getClauses(leadingLogicalOperator = false){
 
-        this.whereClauses.forEach(element => {
-            onlyValues.push(element.value);
-        });
+        var clauses = "";
 
-        return onlyValues;
+        // Add WHERE keyword
+        if (!leadingLogicalOperator) clauses += ' WHERE';
+
+        // Add clauses
+        for (let i = 0; i < this.whereClauses.length; i++){
+
+            // Skip logical operator on the first clause
+            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator}`;
+            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator}`;
+
+            // If the value is a string put it in quotations
+            if (typeof this.values[i] === 'string') clauses += ` \'${this.values[i]}\'`;
+            else clauses += ` ${this.values[i]}`
+            
+        }
+
+        return clauses;
 
     }
 
     /**
      * 
-     * @param {string} baseQuery - The current portion of the SQL query. Usually containing the SELECT and FROM clauses
+     * @param {boolean} leadingLogicalOperator - (Optional) Choose whether the string contains the WHERE clause and if the first clause needs a logical operator
+     * @param {string} placeholderString - (Optional) Choose which string to use as a placeholder for values
      * @returns A SQL query safe string that contains all the where clauses
      * 
      */
-    getClauses(baseQuery){
+    getClausesWithValuePlaceholders(leadingLogicalOperator = false, placeholderString = '(?)'){
 
         // TODO Add override for insert symbol?
         // TODO Add option to insert values over symbol?
         // TODO throw an error here if base query is undefined
-
+        
         var clauses = "";
 
-        // If no "WHERE" keyword present in the base query
-        if (!baseQuery.toLowerCase().includes("where")){
+        // Add WHERE keyword
+        if (!leadingLogicalOperator) clauses += ' WHERE';
+
+        // Add clauses
+        for (let i = 0; i < this.whereClauses.length; i++){
+
+            // Skip logical operator on the first clause
+            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${placeholderString}`;
+            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${placeholderString}`;
             
-            // Add WHERE keyword
-            baseQuery += ' WHERE ';
-
-            // Add clauses
-            for (let i = 0; i < this.whereClauses.length; i++){
-
-                // Skip logical operator on the first clause
-                if (i === 0 ) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                
-            }
-
-        }
-        // If "WHERE" keyword already present in the base query
-        else {
-
-            // Split base query into parts using WHERE keyword as the delimiter
-            var splitBaseQuery = baseQuery.toLowerCase().split('where')
-
-            // If there are multiple WHERE keywords in the base query throw an error
-            if (splitBaseQuery.length !== 2) throw new Error("Error crafting where clauses! Base query contains too many \'where\' keywords");
-
-            // If there are no clauses present
-            if (splitBaseQuery[1].trim().length === 0){
-                
-                // Add clauses
-                for (let i = 0; i < this.whereClauses.length; i++){
-
-                    // Skip logical operator on the first clause
-                    if (i === 0 ) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                    else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                    
-                }
-
-            }
-            // If there are some clauses already present
-            else {
-
-                // Add clauses
-                for (let i = 0; i < this.whereClauses.length; i++){
-
-                    // Skip logical operator on the first clause
-                    clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-                    
-                }
-                
-            }
-
         }
 
         return clauses;
 
+    }
+
+    /**
+     * Clears all stored where clause storage
+     */
+    clear(){
+        this.whereClauses = [];
+        this.values = [];
     }
 
 }
