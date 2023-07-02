@@ -94,11 +94,38 @@ class SQLDynamicWhere{
 
     /**
      * 
-     * @param {string} baseQuery - The current portion of the SQL query. Usually containing the SELECT and FROM clauses
+     * @param {boolean} leadingLogicalOperator - (Optional) Choose whether the string contains the WHERE clause and if the first clause needs a logical operator
      * @returns A SQL query safe string that contains all the where clauses
      * 
      */
     getClauses(leadingLogicalOperator = false){
+
+        var clauses = "";
+
+        // Add WHERE keyword
+        if (!leadingLogicalOperator) clauses += ' WHERE';
+
+        // Add clauses
+        for (let i = 0; i < this.whereClauses.length; i++){
+
+            // Skip logical operator on the first clause
+            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${this.values[i]}`;
+            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${this.values[i]}`;
+            
+        }
+
+        return clauses;
+
+    }
+
+    /**
+     * 
+     * @param {boolean} leadingLogicalOperator - (Optional) Choose whether the string contains the WHERE clause and if the first clause needs a logical operator
+     * @param {string} placeholderString - (Optional) Choose which string to use as a placeholder for values
+     * @returns A SQL query safe string that contains all the where clauses
+     * 
+     */
+    getClausesWithValuePlaceholders(leadingLogicalOperator = false, placeholderString = '(?)'){
 
         // TODO Add override for insert symbol?
         // TODO Add option to insert values over symbol?
@@ -113,8 +140,8 @@ class SQLDynamicWhere{
         for (let i = 0; i < this.whereClauses.length; i++){
 
             // Skip logical operator on the first clause
-            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
-            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} (?)`;
+            if (i === 0 && !leadingLogicalOperator) clauses += ` ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${placeholderString}`;
+            else clauses += ` ${this.whereClauses[i].logicalOperator} ${this.whereClauses[i].field} ${this.whereClauses[i].comparisonOperator} ${placeholderString}`;
             
         }
 
