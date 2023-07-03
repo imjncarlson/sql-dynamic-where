@@ -27,7 +27,7 @@ Generating WHERE clauses with multiple variables
 dynamicWhere.clear();
 
 // Add where clauses
-dynamicWhere.add('name',  sdw.Comparison.Equals, 'Jacob');
+dynamicWhere.addFirst('name',  sdw.Comparison.Equals, 'Jacob');
 dynamicWhere.add(sdw.Logic.And, 'age',  sdw.Comparison.LessThan, 50);
 dynamicWhere.add(sdw.Logic.Or, 'eyes',  sdw.Comparison.DoesNotEqual, 'blue');
 
@@ -41,7 +41,7 @@ Generating WHERE clauses with multiple variables, some undefined
 dynamicWhere.clear();
 
 // Add where clauses
-dynamicWhere.add('name',  sdw.Comparison.Equals, 'Jacob');
+dynamicWhere.addFirst('name',  sdw.Comparison.Equals, 'Jacob');
 dynamicWhere.add(sdw.Logic.And, 'age',  sdw.Comparison.LessThan, undefined);
 dynamicWhere.add(sdw.Logic.Or, 'eyes',  sdw.Comparison.DoesNotEqual, 'blue');
 
@@ -55,7 +55,7 @@ Generating WHERE clauses with a placeholder string for the values
 dynamicWhere.clear();
 
 // Add where clauses
-dynamicWhere.add('name',  sdw.Comparison.Equals, 'Jacob');
+dynamicWhere.addFirst('name',  sdw.Comparison.Equals, 'Jacob');
 dynamicWhere.add(sdw.Logic.And, 'age',  sdw.Comparison.LessThan, 50);
 dynamicWhere.add(sdw.Logic.Or, 'eyes',  sdw.Comparison.DoesNotEqual, 'blue');
 
