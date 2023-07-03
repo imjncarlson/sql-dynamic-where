@@ -44,7 +44,7 @@ class SQLDynamicWhere{
      * @param {Array} override - (Optional) An array of additional value overrides to ignore
      * 
      */
-    add(field, comparisonOperator, value, override = []){ this.add(Logic.And, field, comparisonOperator, value, override) }
+    addFirst(field, comparisonOperator, value, override = []){ this.add('AND', field, comparisonOperator, value, override) }
 
     /**
      *

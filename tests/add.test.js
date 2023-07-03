@@ -33,3 +33,13 @@ test('Adding a new clause with override values', () => {
     expect(dynamicWhere.getValues().length).toBe(1);
 
 });
+
+test('Adding a new clause with no leading logic operator', () => {  
+    
+    dynamicWhere.clear();
+    dynamicWhere.addFirst('color',  sdw.Comparison.Equals, 'green');
+
+    expect(dynamicWhere.getClausesArray().length).toBe(1);
+    expect(dynamicWhere.getValues().length).toBe(1);
+
+});

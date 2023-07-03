@@ -75,3 +75,27 @@ test('Creating WHERE clause with multiple values, custom placeholder', () => {
     expect(dynamicWhere.getValues()[2]).toBe(2022)
 
 });
+
+test('Creating WHERE clause using add first', () => {  
+    
+    dynamicWhere.clear();
+    dynamicWhere.addFirst('make',  sdw.Comparison.Equals, 'Honda');
+    dynamicWhere.add(sdw.Logic.Or, 'year',  sdw.Comparison.Equals, 2022);
+
+    expect(dynamicWhere.getClausesWithValuePlaceholders()).toBe(' WHERE make = (?) OR year = (?)');
+    expect(dynamicWhere.getValues()[0]).toBe('Honda')
+    expect(dynamicWhere.getValues()[1]).toBe(2022)
+
+});
+
+test('Creating WHERE clause using add first, show default leading operator', () => {  
+    
+    dynamicWhere.clear();
+    dynamicWhere.addFirst('make',  sdw.Comparison.Equals, 'Honda');
+    dynamicWhere.add(sdw.Logic.Or, 'year',  sdw.Comparison.Equals, 2022);
+
+    expect(dynamicWhere.getClausesWithValuePlaceholders(true)).toBe(' AND make = (?) OR year = (?)');
+    expect(dynamicWhere.getValues()[0]).toBe('Honda')
+    expect(dynamicWhere.getValues()[1]).toBe(2022)
+
+});

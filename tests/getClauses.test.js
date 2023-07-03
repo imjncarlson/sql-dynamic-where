@@ -61,3 +61,27 @@ test('Creating WHERE clause with multiple values, some overrides', () => {
     expect(dynamicWhere.getValues()[1]).toBe(2022)
 
 });
+
+test('Creating WHERE clause using add first', () => {  
+    
+    dynamicWhere.clear();
+    dynamicWhere.addFirst('make',  sdw.Comparison.Equals, 'Honda');
+    dynamicWhere.add(sdw.Logic.Or, 'year',  sdw.Comparison.Equals, 2022);
+
+    expect(dynamicWhere.getClauses()).toBe(' WHERE make = \'Honda\' OR year = 2022');
+    expect(dynamicWhere.getValues()[0]).toBe('Honda')
+    expect(dynamicWhere.getValues()[1]).toBe(2022)
+
+});
+
+test('Creating WHERE clause using add first, show default leading operator', () => {  
+    
+    dynamicWhere.clear();
+    dynamicWhere.addFirst('make',  sdw.Comparison.Equals, 'Honda');
+    dynamicWhere.add(sdw.Logic.Or, 'year',  sdw.Comparison.Equals, 2022);
+
+    expect(dynamicWhere.getClauses(true)).toBe(' AND make = \'Honda\' OR year = 2022');
+    expect(dynamicWhere.getValues()[0]).toBe('Honda')
+    expect(dynamicWhere.getValues()[1]).toBe(2022)
+
+});
