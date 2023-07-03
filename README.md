@@ -85,7 +85,7 @@ dynamicWhere.getClauses(true)
 
 Add additional values to the skip in the clause
 ```js
-add(field, comparisonOperator, value, override = [])
+addFirst(field, comparisonOperator, value, override = [])
 add(logicalOperator, field, comparisonOperator, value, override = [])
 ```
 Include leading logic operator and remove WHERE keyword
