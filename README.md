@@ -83,7 +83,7 @@ dynamicWhere.getClauses(true)
 
 ## Function Overrides
 
-Add additional values to the skip in the clause
+Add additional values to skip in the clause
 ```js
 addFirst(field, comparisonOperator, value, override = [])
 add(logicalOperator, field, comparisonOperator, value, override = [])
