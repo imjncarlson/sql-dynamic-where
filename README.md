@@ -17,7 +17,7 @@ npm i sql-dynamic-where
 ```
 Adding sql-dynamic-where to a script
 ```js
-const sdw = require('../SQLDynamicWhere');
+const sdw = require('sql-dynamic-where')
 dynamicWhere = new sdw();
 ```
 ## Examples
